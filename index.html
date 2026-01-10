@@ -36,51 +36,6 @@
             letter-spacing: 2px;
         }
 
-        .input-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .input-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .input-wrapper label {
-            font-size: 12px;
-            margin-bottom: 5px;
-            opacity: 0.7;
-        }
-
-        .input-wrapper input {
-            width: 80px;
-            padding: 15px;
-            font-size: 24px;
-            text-align: center;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            outline: none;
-            transition: background 0.3s;
-        }
-
-        .input-wrapper input:focus {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .input-wrapper input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .colon {
-            font-size: 32px;
-            padding-top: 25px;
-        }
-
         .display {
             font-size: 72px;
             font-weight: 200;
@@ -91,6 +46,9 @@
             cursor: pointer;
             transition: all 0.3s;
             user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .display:hover {
@@ -105,6 +63,62 @@
         .display.finished {
             animation: pulse 0.5s ease-in-out infinite alternate;
             color: #f87171;
+        }
+
+        .display-input {
+            width: 100px;
+            font-size: 72px;
+            font-weight: 200;
+            font-family: inherit;
+            background: transparent;
+            border: none;
+            color: inherit;
+            text-align: center;
+            outline: none;
+            padding: 0;
+            -moz-appearance: textfield;
+        }
+
+        .display-input::-webkit-outer-spin-button,
+        .display-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .display-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .display-input:disabled {
+            color: inherit;
+            opacity: 1;
+            -webkit-text-fill-color: inherit;
+        }
+
+        .display-colon {
+            font-size: 72px;
+            font-weight: 200;
+        }
+
+        .display-countdown {
+            display: none;
+            cursor: pointer;
+        }
+
+        .display.running .display-countdown,
+        .display.finished .display-countdown {
+            display: block;
+        }
+
+        .display.running .display-inputs,
+        .display.finished .display-inputs {
+            display: none;
+        }
+
+        .display-inputs {
+            display: flex;
+            align-items: center;
         }
 
         @keyframes pulse {
@@ -205,19 +219,14 @@
     <div class="container">
         <h1>TIMER</h1>
         
-        <div class="input-group">
-            <div class="input-wrapper">
-                <label>MINUTES</label>
-                <input type="number" id="minutesInput" min="0" max="99" value="5" placeholder="00">
+        <div class="display" id="display">
+            <div class="display-inputs">
+                <input type="number" class="display-input" id="minutesInput" min="0" max="99" value="5">
+                <span class="display-colon">:</span>
+                <input type="number" class="display-input" id="secondsInput" min="0" max="59" value="00">
             </div>
-            <span class="colon">:</span>
-            <div class="input-wrapper">
-                <label>SECONDS</label>
-                <input type="number" id="secondsInput" min="0" max="59" value="0" placeholder="00">
-            </div>
+            <span class="display-countdown" id="countdown" onclick="restartTimer()">05:00</span>
         </div>
-        
-        <div class="display" id="display" onclick="restartTimer()">05:00</div>
         <p class="display-hint" id="displayHint">Click to restart</p>
         
         <div class="buttons">
@@ -242,6 +251,7 @@
         let initialSeconds = 0;
 
         const display = document.getElementById('display');
+        const countdown = document.getElementById('countdown');
         const displayHint = document.getElementById('displayHint');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
@@ -254,31 +264,46 @@
             const savedMinutes = localStorage.getItem('timerMinutes');
             const savedSeconds = localStorage.getItem('timerSeconds');
             if (savedMinutes !== null) {
-                minutesInput.value = savedMinutes;
+                minutesInput.value = String(parseInt(savedMinutes) || 0).padStart(2, '0');
                 initialMinutes = parseInt(savedMinutes) || 0;
             }
             if (savedSeconds !== null) {
-                secondsInput.value = savedSeconds;
+                secondsInput.value = String(parseInt(savedSeconds) || 0).padStart(2, '0');
                 initialSeconds = parseInt(savedSeconds) || 0;
             }
         }
 
         // Save duration to localStorage
         function saveDuration() {
-            localStorage.setItem('timerMinutes', minutesInput.value);
-            localStorage.setItem('timerSeconds', secondsInput.value);
+            localStorage.setItem('timerMinutes', parseInt(minutesInput.value) || 0);
+            localStorage.setItem('timerSeconds', parseInt(secondsInput.value) || 0);
         }
 
         // Update display based on input
         function updateDisplayFromInput() {
             const mins = parseInt(minutesInput.value) || 0;
             const secs = parseInt(secondsInput.value) || 0;
-            display.textContent = formatTime(mins * 60 + secs);
+            countdown.textContent = formatTime(mins * 60 + secs);
             saveDuration();
+        }
+
+        // Format input on blur to show leading zeros
+        function formatInputOnBlur(input, max) {
+            let val = parseInt(input.value) || 0;
+            if (val > max) val = max;
+            if (val < 0) val = 0;
+            input.value = String(val).padStart(2, '0');
+            updateDisplayFromInput();
         }
 
         minutesInput.addEventListener('input', updateDisplayFromInput);
         secondsInput.addEventListener('input', updateDisplayFromInput);
+        minutesInput.addEventListener('blur', () => formatInputOnBlur(minutesInput, 99));
+        secondsInput.addEventListener('blur', () => formatInputOnBlur(secondsInput, 59));
+
+        // Select all on focus for easy editing
+        minutesInput.addEventListener('focus', () => minutesInput.select());
+        secondsInput.addEventListener('focus', () => secondsInput.select());
 
         // Load saved duration on page load
         loadSavedDuration();
@@ -332,7 +357,7 @@
             const remaining = Math.max(0, endTime - Date.now());
             const remainingSeconds = Math.ceil(remaining / 1000);
 
-            display.textContent = formatTime(remainingSeconds);
+            countdown.textContent = formatTime(remainingSeconds);
 
             if (remaining > 0) {
                 // Update display every 100ms for smooth countdown
@@ -343,7 +368,7 @@
         function timerFinished() {
             isRunning = false;
             clearTimeout(displayInterval);
-            display.textContent = '00:00';
+            countdown.textContent = '00:00';
             display.classList.remove('running');
             display.classList.add('finished');
             flashOverlay.classList.add('active');
