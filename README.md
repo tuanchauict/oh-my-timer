@@ -1,0 +1,32 @@
+# Oh! My Timer
+
+A simple, elegant countdown timer built with pure HTML, CSS, and JavaScript.
+
+## Features
+
+- **Set Duration**: Input minutes and seconds directly in the display
+- **Precise Timing**: Uses exact end-time calculation to prevent drift
+- **Sound Alert**: Beeping alarm when timer finishes
+- **Visual Effects**: Pulsing text glow and screen flash on completion
+- **Auto-Save**: Duration settings are saved to localStorage
+- **Fullscreen Mode**: Focus on your timer without distractions
+- **Responsive Design**: Works on desktop and mobile devices
+- **Restart on Click**: Click the countdown display to restart the timer
+
+## Usage
+
+1. Set your desired time using the minutes and seconds inputs
+2. Click **Start** to begin the countdown
+3. Click the countdown display to restart, or **Stop** to cancel
+4. Use the fullscreen button (top-right) for an immersive experience
+
+## Tech Stack
+
+- Pure HTML5, CSS3, and JavaScript
+- No external dependencies
+- Web Audio API for sound generation
+- Fullscreen API for immersive mode
+
+## License
+
+MIT
