@@ -1,5 +1,9 @@
 # Oh! My Timer
 
+<p align="center">
+  <img src="favicon.svg" alt="Oh! My Timer" width="128" height="128">
+</p>
+
 A simple, elegant countdown timer built with pure HTML, CSS, and JavaScript.
 
 **Live Demo:** [timer.iamtuna.org](https://timer.iamtuna.org)
