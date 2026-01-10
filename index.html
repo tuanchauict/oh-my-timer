@@ -589,12 +589,20 @@
             saveDuration();
         }
 
+        const originalTitle = 'Oh! My Timer - Simple Countdown Timer';
+
         // Update countdown display with separate mins/secs
         function updateCountdownDisplay(totalSeconds) {
             const mins = Math.floor(totalSeconds / 60);
             const secs = totalSeconds % 60;
+            const timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
             countdownMins.textContent = String(mins).padStart(2, '0');
             countdownSecs.textContent = String(secs).padStart(2, '0');
+            
+            // Update page title with remaining time
+            if (isRunning || display.classList.contains('finished')) {
+                document.title = timeStr + ' - Oh! My Timer';
+            }
         }
 
         // Format input on blur to show leading zeros
@@ -708,6 +716,9 @@
             // Re-enable inputs and reset display
             minutesInput.disabled = false;
             secondsInput.disabled = false;
+            
+            // Reset page title
+            document.title = originalTitle;
             updateDisplayFromInput();
         }
 
