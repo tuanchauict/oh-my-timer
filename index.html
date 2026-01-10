@@ -682,9 +682,9 @@
         function timerFinished() {
             isRunning = false;
             clearTimeout(displayInterval);
-            updateCountdownDisplay(0);
             display.classList.remove('running');
             display.classList.add('finished');
+            updateCountdownDisplay(0);
             stopBtn.classList.add('finished');
             flashOverlay.classList.add('active');
 
