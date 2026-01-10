@@ -3,7 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer</title>
+    <title>Timer - Simple Countdown Timer | Free Online Timer</title>
+    <meta name="description" content="A simple, elegant countdown timer. Set minutes and seconds, start the countdown, and get notified with sound when time's up. Works on desktop and mobile.">
+    <meta name="keywords" content="timer, countdown, countdown timer, online timer, free timer, stopwatch, alarm, pomodoro">
+    <meta name="author" content="Timer App">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1a1a2e">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Timer - Simple Countdown Timer">
+    <meta property="og:description" content="A simple, elegant countdown timer with sound notification. Free and works on all devices.">
+    <meta property="og:site_name" content="Timer">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Timer - Simple Countdown Timer">
+    <meta name="twitter:description" content="A simple, elegant countdown timer with sound notification. Free and works on all devices.">
+    
+    <link rel="canonical" href="">
     <style>
         * {
             margin: 0;
@@ -249,6 +267,32 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .footer p {
+            font-size: clamp(10px, 2vw, 12px);
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -278,6 +322,10 @@
             <button class="stop-btn" id="stopBtn" onclick="stopTimer()">Stop</button>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>A simple, distraction-free countdown timer. Set your duration, press start, and focus on what matters. Your settings are saved automatically.</p>
+    </footer>
 
     <script>
         // Audio context for alarm sound
