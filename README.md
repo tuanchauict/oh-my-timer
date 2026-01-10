@@ -2,6 +2,8 @@
 
 A simple, elegant countdown timer built with pure HTML, CSS, and JavaScript.
 
+**Live Demo:** [timer.iamtuna.org](https://timer.iamtuna.org)
+
 ## Features
 
 - **Set Duration**: Input minutes and seconds directly in the display
