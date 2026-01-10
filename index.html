@@ -269,6 +269,40 @@
             to { opacity: 1; }
         }
 
+        .melody-selector {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .melody-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .melody-btn:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .melody-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
         .footer {
             position: fixed;
             bottom: 20px;
@@ -340,7 +374,8 @@
             display: block;
         }
 
-        :fullscreen .footer {
+        :fullscreen .footer,
+        :fullscreen .melody-selector {
             display: none;
         }
     </style>
@@ -382,6 +417,12 @@
         </div>
     </div>
 
+    <div class="melody-selector">
+        <button class="melody-btn active" data-melody="chime" onclick="selectMelody('chime')">🔔 Chime</button>
+        <button class="melody-btn" data-melody="bell" onclick="selectMelody('bell')">🎵 Bell</button>
+        <button class="melody-btn" data-melody="arcade" onclick="selectMelody('arcade')">🎮 Arcade</button>
+    </div>
+
     <footer class="footer">
         <p>A simple, distraction-free countdown timer. Set your duration, press start, and focus on what matters. Your settings are saved automatically.</p>
     </footer>
@@ -391,6 +432,49 @@
         let audioContext = null;
         let gainNode = null;
         let isPlaying = false;
+        let selectedMelody = localStorage.getItem('selectedMelody') || 'chime';
+
+        // Melody definitions
+        const melodies = {
+            chime: [
+                { freq: 784, duration: 0.25 },    // G5
+                { freq: 988, duration: 0.25 },    // B5
+                { freq: 1175, duration: 0.25 },   // D6
+                { freq: 1480, duration: 0.5 },    // F#6
+                { freq: 1175, duration: 0.25 },   // D6
+                { freq: 988, duration: 0.25 },    // B5
+                { freq: 784, duration: 0.5 },     // G5
+            ],
+            bell: [
+                { freq: 523, duration: 0.4 },     // C5
+                { freq: 659, duration: 0.4 },     // E5
+                { freq: 784, duration: 0.4 },     // G5
+                { freq: 1047, duration: 0.8 },    // C6
+            ],
+            arcade: [
+                { freq: 440, duration: 0.1 },     // A4
+                { freq: 554, duration: 0.1 },     // C#5
+                { freq: 659, duration: 0.1 },     // E5
+                { freq: 880, duration: 0.2 },     // A5
+                { freq: 659, duration: 0.1 },     // E5
+                { freq: 880, duration: 0.3 },     // A5
+            ]
+        };
+
+        function selectMelody(melody) {
+            selectedMelody = melody;
+            localStorage.setItem('selectedMelody', melody);
+            document.querySelectorAll('.melody-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.melody === melody);
+            });
+        }
+
+        // Initialize melody selection on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.melody-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.melody === selectedMelody);
+            });
+        });
 
         // Timer state
         let endTime = null;
@@ -598,16 +682,8 @@
                 gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
                 gainNode.connect(audioContext.destination);
 
-                // Gentle marimba-style chime pattern (like iPhone "Ripples")
-                const melody = [
-                    { freq: 784, duration: 0.25 },    // G5
-                    { freq: 988, duration: 0.25 },    // B5
-                    { freq: 1175, duration: 0.25 },   // D6
-                    { freq: 1480, duration: 0.5 },    // F#6
-                    { freq: 1175, duration: 0.25 },   // D6
-                    { freq: 988, duration: 0.25 },    // B5
-                    { freq: 784, duration: 0.5 },     // G5
-                ];
+                // Get selected melody
+                const melody = melodies[selectedMelody] || melodies.chime;
                 
                 const patternDuration = melody.reduce((sum, n) => sum + n.duration, 0) + 0.8;
                 
