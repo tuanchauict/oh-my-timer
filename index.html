@@ -868,6 +868,24 @@
             }
         }
 
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            // Ignore if user is typing in an input
+            if (e.target.tagName === 'INPUT') return;
+            
+            if (e.code === 'Escape') {
+                e.preventDefault();
+                stopTimer();
+            } else if (e.code === 'Space') {
+                e.preventDefault();
+                if (isRunning || display.classList.contains('finished')) {
+                    restartTimer();
+                } else {
+                    startTimer();
+                }
+            }
+        });
+
         // Initialize display
         updateDisplayFromInput();
     </script>
