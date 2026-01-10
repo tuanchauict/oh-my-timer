@@ -11,8 +11,13 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --display-size: min(160px, 20vw);
+            --wrapper-width: min(240px, 30vw);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Courier New', monospace;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,14 +28,16 @@
 
         .container {
             text-align: center;
-            padding: 40px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
         }
 
         .display {
-            font-size: 120px;
+            font-size: var(--display-size);
             font-weight: 200;
-            margin: 30px 0;
-            padding: 20px 40px;
+            margin: 20px 0;
+            padding: 10px 20px;
             cursor: pointer;
             transition: all 0.3s;
             user-select: none;
@@ -53,15 +60,16 @@
         }
 
         .input-wrapper {
-            width: 160px;
+            width: var(--wrapper-width);
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         .display-input {
             width: 100%;
-            font-size: 120px;
+            font-size: var(--display-size);
             font-weight: 200;
             font-family: inherit;
             background: transparent;
@@ -91,23 +99,20 @@
         }
 
         .display-colon {
-            font-size: 120px;
+            font-size: var(--display-size);
             font-weight: 200;
-            width: 40px;
-            min-width: 40px;
-            flex-shrink: 0;
             text-align: center;
         }
 
         .display-countdown {
             display: none;
             cursor: pointer;
-            font-size: 120px;
+            font-size: var(--display-size);
             font-weight: 200;
         }
 
         .countdown-value {
-            width: 160px;
+            width: var(--wrapper-width);
             text-align: center;
             display: inline-block;
         }
@@ -159,8 +164,9 @@
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 18px;
+            padding: 12px 30px;
+            font-size: clamp(14px, 3vw, 18px);
+            font-family: inherit;
             border: none;
             border-radius: 10px;
             cursor: pointer;
