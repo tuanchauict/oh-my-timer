@@ -235,7 +235,8 @@
 
         // Timer state
         let endTime = null;
-        let timerInterval = null;
+        let displayInterval = null;
+        let finishTimeout = null;
         let isRunning = false;
         let initialMinutes = 5;
         let initialSeconds = 0;
@@ -248,15 +249,39 @@
         const secondsInput = document.getElementById('secondsInput');
         const flashOverlay = document.getElementById('flashOverlay');
 
+        // Load saved duration from localStorage
+        function loadSavedDuration() {
+            const savedMinutes = localStorage.getItem('timerMinutes');
+            const savedSeconds = localStorage.getItem('timerSeconds');
+            if (savedMinutes !== null) {
+                minutesInput.value = savedMinutes;
+                initialMinutes = parseInt(savedMinutes) || 0;
+            }
+            if (savedSeconds !== null) {
+                secondsInput.value = savedSeconds;
+                initialSeconds = parseInt(savedSeconds) || 0;
+            }
+        }
+
+        // Save duration to localStorage
+        function saveDuration() {
+            localStorage.setItem('timerMinutes', minutesInput.value);
+            localStorage.setItem('timerSeconds', secondsInput.value);
+        }
+
         // Update display based on input
         function updateDisplayFromInput() {
             const mins = parseInt(minutesInput.value) || 0;
             const secs = parseInt(secondsInput.value) || 0;
             display.textContent = formatTime(mins * 60 + secs);
+            saveDuration();
         }
 
         minutesInput.addEventListener('input', updateDisplayFromInput);
         secondsInput.addEventListener('input', updateDisplayFromInput);
+
+        // Load saved duration on page load
+        loadSavedDuration();
 
         function formatTime(totalSeconds) {
             const mins = Math.floor(totalSeconds / 60);
@@ -294,7 +319,10 @@
             minutesInput.disabled = true;
             secondsInput.disabled = true;
 
-            // Start countdown with setTimeout for accuracy
+            // Set exact timeout for timer finish (prevents drift)
+            finishTimeout = setTimeout(timerFinished, totalSeconds * 1000);
+
+            // Start display update interval
             updateCountdown();
         }
 
@@ -306,17 +334,15 @@
 
             display.textContent = formatTime(remainingSeconds);
 
-            if (remaining <= 0) {
-                timerFinished();
-            } else {
-                // Use setTimeout for next update, synced to when the second changes
-                const msUntilNextSecond = remaining % 1000 || 1000;
-                timerInterval = setTimeout(updateCountdown, msUntilNextSecond);
+            if (remaining > 0) {
+                // Update display every 100ms for smooth countdown
+                displayInterval = setTimeout(updateCountdown, 100);
             }
         }
 
         function timerFinished() {
             isRunning = false;
+            clearTimeout(displayInterval);
             display.textContent = '00:00';
             display.classList.remove('running');
             display.classList.add('finished');
@@ -332,7 +358,8 @@
 
         function stopTimer() {
             isRunning = false;
-            clearTimeout(timerInterval);
+            clearTimeout(displayInterval);
+            clearTimeout(finishTimeout);
             
             // Stop sound and effects
             stopSound();
@@ -356,7 +383,8 @@
             
             // Stop current timer and sound
             isRunning = false;
-            clearTimeout(timerInterval);
+            clearTimeout(displayInterval);
+            clearTimeout(finishTimeout);
             stopSound();
             flashOverlay.classList.remove('active');
             display.classList.remove('finished');
@@ -368,6 +396,9 @@
             endTime = Date.now() + totalSeconds * 1000;
             isRunning = true;
             display.classList.add('running');
+
+            // Set exact timeout for timer finish
+            finishTimeout = setTimeout(timerFinished, totalSeconds * 1000);
 
             updateCountdown();
         }
