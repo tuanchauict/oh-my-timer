@@ -167,38 +167,62 @@
             padding: 12px 30px;
             font-size: clamp(14px, 3vw, 18px);
             font-family: inherit;
-            border: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            min-width: 120px;
         }
 
         .start-btn {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #fff;
+            border-color: rgba(74, 222, 128, 0.5);
+            color: #4ade80;
         }
 
         .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(74, 222, 128, 0.4);
+            background: rgba(74, 222, 128, 0.15);
+            border-color: #4ade80;
+            color: #4ade80;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
         }
 
         .stop-btn {
-            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-            color: #fff;
+            border-color: rgba(248, 113, 113, 0.5);
+            color: #f87171;
             display: none;
         }
 
         .stop-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(248, 113, 113, 0.4);
+            background: rgba(248, 113, 113, 0.15);
+            border-color: #f87171;
+            color: #f87171;
+            text-shadow: 0 0 20px rgba(248, 113, 113, 0.5);
         }
 
         .stop-btn.visible {
             display: inline-block;
+        }
+
+        .stop-btn.finished {
+            animation: button-pulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes button-pulse {
+            from {
+                background: rgba(248, 113, 113, 0.1);
+                border-color: rgba(248, 113, 113, 0.5);
+                text-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+            }
+            to {
+                background: rgba(248, 113, 113, 0.3);
+                border-color: #f87171;
+                text-shadow: 0 0 30px rgba(248, 113, 113, 0.8);
+            }
         }
 
         .start-btn.hidden {
@@ -397,6 +421,7 @@
             updateCountdownDisplay(0);
             display.classList.remove('running');
             display.classList.add('finished');
+            stopBtn.classList.add('finished');
             flashOverlay.classList.add('active');
 
             // Play alarm sound
@@ -419,6 +444,7 @@
             // Reset UI
             startBtn.classList.remove('hidden');
             stopBtn.classList.remove('visible');
+            stopBtn.classList.remove('finished');
             displayHint.classList.remove('visible');
             display.classList.remove('running');
             display.classList.remove('finished');
@@ -439,6 +465,7 @@
             stopSound();
             flashOverlay.classList.remove('active');
             display.classList.remove('finished');
+            stopBtn.classList.remove('finished');
 
             // Restart with same duration
             const totalSeconds = initialMinutes * 60 + initialSeconds;
