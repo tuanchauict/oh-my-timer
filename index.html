@@ -52,8 +52,15 @@
             color: #f87171;
         }
 
-        .display-input {
+        .input-wrapper {
             width: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .display-input {
+            width: 100%;
             font-size: 120px;
             font-weight: 200;
             font-family: inherit;
@@ -86,16 +93,29 @@
         .display-colon {
             font-size: 120px;
             font-weight: 200;
+            width: 40px;
+            min-width: 40px;
+            flex-shrink: 0;
+            text-align: center;
         }
 
         .display-countdown {
             display: none;
             cursor: pointer;
+            font-size: 120px;
+            font-weight: 200;
+        }
+
+        .countdown-value {
+            width: 160px;
+            text-align: center;
+            display: inline-block;
         }
 
         .display.running .display-countdown,
         .display.finished .display-countdown {
-            display: block;
+            display: flex;
+            align-items: center;
         }
 
         .display.running .display-inputs,
@@ -121,14 +141,15 @@
 
         .display-hint {
             font-size: 12px;
-            opacity: 0.5;
+            opacity: 0;
             margin-top: -20px;
             margin-bottom: 20px;
-            display: none;
+            visibility: hidden;
         }
 
         .display-hint.visible {
-            display: block;
+            opacity: 0.5;
+            visibility: visible;
         }
 
         .buttons {
@@ -206,11 +227,19 @@
     <div class="container">
         <div class="display" id="display">
             <div class="display-inputs">
-                <input type="number" class="display-input" id="minutesInput" min="0" max="99" value="5">
+                <div class="input-wrapper">
+                    <input type="number" class="display-input" id="minutesInput" min="0" max="99" value="5">
+                </div>
                 <span class="display-colon">:</span>
-                <input type="number" class="display-input" id="secondsInput" min="0" max="59" value="00">
+                <div class="input-wrapper">
+                    <input type="number" class="display-input" id="secondsInput" min="0" max="59" value="00">
+                </div>
             </div>
-            <span class="display-countdown" id="countdown" onclick="restartTimer()">05:00</span>
+            <div class="display-countdown" id="countdown" onclick="restartTimer()">
+                <span class="countdown-value" id="countdownMins">05</span>
+                <span class="display-colon">:</span>
+                <span class="countdown-value" id="countdownSecs">00</span>
+            </div>
         </div>
         <p class="display-hint" id="displayHint">Click to restart</p>
         
@@ -237,6 +266,8 @@
 
         const display = document.getElementById('display');
         const countdown = document.getElementById('countdown');
+        const countdownMins = document.getElementById('countdownMins');
+        const countdownSecs = document.getElementById('countdownSecs');
         const displayHint = document.getElementById('displayHint');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
@@ -268,8 +299,16 @@
         function updateDisplayFromInput() {
             const mins = parseInt(minutesInput.value) || 0;
             const secs = parseInt(secondsInput.value) || 0;
-            countdown.textContent = formatTime(mins * 60 + secs);
+            updateCountdownDisplay(mins * 60 + secs);
             saveDuration();
+        }
+
+        // Update countdown display with separate mins/secs
+        function updateCountdownDisplay(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            countdownMins.textContent = String(mins).padStart(2, '0');
+            countdownSecs.textContent = String(secs).padStart(2, '0');
         }
 
         // Format input on blur to show leading zeros
@@ -338,7 +377,7 @@
             const remaining = Math.max(0, endTime - Date.now());
             const remainingSeconds = Math.ceil(remaining / 1000);
 
-            countdown.textContent = formatTime(remainingSeconds);
+            updateCountdownDisplay(remainingSeconds);
 
             if (remaining > 0) {
                 // Update display every 100ms for smooth countdown
@@ -349,7 +388,7 @@
         function timerFinished() {
             isRunning = false;
             clearTimeout(displayInterval);
-            countdown.textContent = '00:00';
+            updateCountdownDisplay(0);
             display.classList.remove('running');
             display.classList.add('finished');
             flashOverlay.classList.add('active');
