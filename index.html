@@ -421,6 +421,7 @@
         <button class="melody-btn active" data-melody="chime" onclick="selectMelody('chime')">🔔 Chime</button>
         <button class="melody-btn" data-melody="bell" onclick="selectMelody('bell')">🎵 Bell</button>
         <button class="melody-btn" data-melody="arcade" onclick="selectMelody('arcade')">🎮 Arcade</button>
+        <button class="melody-btn" data-melody="siren" onclick="selectMelody('siren')">🚨 Siren</button>
     </div>
 
     <footer class="footer">
@@ -458,6 +459,16 @@
                 { freq: 880, duration: 0.2 },     // A5
                 { freq: 659, duration: 0.1 },     // E5
                 { freq: 880, duration: 0.3 },     // A5
+            ],
+            siren: [
+                { freq: 880, duration: 0.15 },    // A5
+                { freq: 1760, duration: 0.15 },   // A6
+                { freq: 880, duration: 0.15 },    // A5
+                { freq: 1760, duration: 0.15 },   // A6
+                { freq: 880, duration: 0.15 },    // A5
+                { freq: 1760, duration: 0.15 },   // A6
+                { freq: 880, duration: 0.15 },    // A5
+                { freq: 1760, duration: 0.15 },   // A6
             ]
         };
 
