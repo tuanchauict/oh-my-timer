@@ -1,34 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
   <!-- 8-bit pixel art timer/clock -->
-  <rect width="16" height="16" fill="#000000"/>
+  <rect width="16" height="16" fill="#0f380f"/>
   
   <!-- Clock face (pixelated circle) -->
-  <rect x="5" y="1" width="6" height="1" fill="#00ff00"/>
-  <rect x="3" y="2" width="2" height="1" fill="#00ff00"/>
-  <rect x="11" y="2" width="2" height="1" fill="#00ff00"/>
-  <rect x="2" y="3" width="1" height="2" fill="#00ff00"/>
-  <rect x="13" y="3" width="1" height="2" fill="#00ff00"/>
-  <rect x="1" y="5" width="1" height="6" fill="#00ff00"/>
-  <rect x="14" y="5" width="1" height="6" fill="#00ff00"/>
-  <rect x="2" y="11" width="1" height="2" fill="#00ff00"/>
-  <rect x="13" y="11" width="1" height="2" fill="#00ff00"/>
-  <rect x="3" y="13" width="2" height="1" fill="#00ff00"/>
-  <rect x="11" y="13" width="2" height="1" fill="#00ff00"/>
-  <rect x="5" y="14" width="6" height="1" fill="#00ff00"/>
+  <rect x="5" y="1" width="6" height="1" fill="#9bbc0f"/>
+  <rect x="3" y="2" width="2" height="1" fill="#9bbc0f"/>
+  <rect x="11" y="2" width="2" height="1" fill="#9bbc0f"/>
+  <rect x="2" y="3" width="1" height="2" fill="#9bbc0f"/>
+  <rect x="13" y="3" width="1" height="2" fill="#9bbc0f"/>
+  <rect x="1" y="5" width="1" height="6" fill="#9bbc0f"/>
+  <rect x="14" y="5" width="1" height="6" fill="#9bbc0f"/>
+  <rect x="2" y="11" width="1" height="2" fill="#9bbc0f"/>
+  <rect x="13" y="11" width="1" height="2" fill="#9bbc0f"/>
+  <rect x="3" y="13" width="2" height="1" fill="#9bbc0f"/>
+  <rect x="11" y="13" width="2" height="1" fill="#9bbc0f"/>
+  <rect x="5" y="14" width="6" height="1" fill="#9bbc0f"/>
   
   <!-- Fill inside -->
-  <rect x="5" y="2" width="6" height="1" fill="#00ff00"/>
-  <rect x="3" y="3" width="10" height="2" fill="#00ff00"/>
-  <rect x="2" y="5" width="12" height="6" fill="#00ff00"/>
-  <rect x="3" y="11" width="10" height="2" fill="#00ff00"/>
-  <rect x="5" y="13" width="6" height="1" fill="#00ff00"/>
+  <rect x="5" y="2" width="6" height="1" fill="#9bbc0f"/>
+  <rect x="3" y="3" width="10" height="2" fill="#9bbc0f"/>
+  <rect x="2" y="5" width="12" height="6" fill="#9bbc0f"/>
+  <rect x="3" y="11" width="10" height="2" fill="#9bbc0f"/>
+  <rect x="5" y="13" width="6" height="1" fill="#9bbc0f"/>
   
   <!-- Hour hand (pointing up) -->
-  <rect x="7" y="4" width="2" height="4" fill="#000000"/>
+  <rect x="7" y="4" width="2" height="4" fill="#0f380f"/>
   
   <!-- Minute hand (pointing right) -->
-  <rect x="8" y="7" width="4" height="2" fill="#000000"/>
+  <rect x="8" y="7" width="4" height="2" fill="#0f380f"/>
   
   <!-- Center dot -->
-  <rect x="7" y="7" width="2" height="2" fill="#000000"/>
+  <rect x="7" y="7" width="2" height="2" fill="#0f380f"/>
 </svg>
