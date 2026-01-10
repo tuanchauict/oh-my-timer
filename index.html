@@ -286,10 +286,6 @@
         minutesInput.addEventListener('blur', () => formatInputOnBlur(minutesInput, 99));
         secondsInput.addEventListener('blur', () => formatInputOnBlur(secondsInput, 59));
 
-        // Select all on focus for easy editing
-        minutesInput.addEventListener('focus', () => minutesInput.select());
-        secondsInput.addEventListener('focus', () => secondsInput.select());
-
         // Load saved duration on page load
         loadSavedDuration();
 
