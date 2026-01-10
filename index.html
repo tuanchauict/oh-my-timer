@@ -478,6 +478,59 @@
             document.querySelectorAll('.melody-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.melody === melody);
             });
+            
+            // Preview the melody if timer is not in finished state
+            if (!display.classList.contains('finished')) {
+                previewMelody(melody);
+            }
+        }
+
+        // Preview a melody (play once)
+        function previewMelody(melodyName) {
+            // Stop any existing preview
+            stopPreview();
+            
+            try {
+                previewContext = new (window.AudioContext || window.webkitAudioContext)();
+                const previewGain = previewContext.createGain();
+                previewGain.gain.setValueAtTime(0.3, previewContext.currentTime);
+                previewGain.connect(previewContext.destination);
+                
+                const melody = melodies[melodyName] || melodies.chime;
+                let noteTime = previewContext.currentTime;
+                
+                melody.forEach(note => {
+                    const osc = previewContext.createOscillator();
+                    const noteGain = previewContext.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, noteTime);
+                    
+                    noteGain.gain.setValueAtTime(0, noteTime);
+                    noteGain.gain.linearRampToValueAtTime(0.3, noteTime + 0.005);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, noteTime + note.duration + 0.3);
+                    
+                    osc.connect(noteGain);
+                    noteGain.connect(previewGain);
+                    osc.start(noteTime);
+                    osc.stop(noteTime + note.duration + 0.4);
+                    
+                    noteTime += note.duration;
+                });
+            } catch (e) {
+                console.error('Error previewing melody:', e);
+            }
+        }
+        
+        let previewContext = null;
+        
+        function stopPreview() {
+            if (previewContext) {
+                try {
+                    previewContext.close();
+                } catch (e) {}
+                previewContext = null;
+            }
         }
 
         // Initialize melody selection on load
