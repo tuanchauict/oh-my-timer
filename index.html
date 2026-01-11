@@ -68,6 +68,7 @@
             transition: all 0.3s;
             user-select: none;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
@@ -135,6 +136,8 @@
             cursor: pointer;
             font-size: var(--display-size);
             font-weight: 700;
+            align-items: center;
+            justify-content: center;
         }
 
         .countdown-value {
@@ -145,7 +148,7 @@
 
         .display.running .display-countdown,
         .display.finished .display-countdown {
-            display: flex;
+            display: inline-flex;
             align-items: center;
         }
 
