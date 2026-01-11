@@ -35,6 +35,10 @@
             --wrapper-width: min(240px, 30vw);
             --effect-color: 248, 113, 113;
             --effect-hex: #f87171;
+            --accent-color: 74, 222, 128;
+            --accent-hex: #4ade80;
+            --bg-start: #1a1a2e;
+            --bg-end: #16213e;
         }
 
         body {
@@ -43,8 +47,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
             color: #fff;
+            transition: background 0.5s ease;
         }
 
         .container {
@@ -72,7 +77,7 @@
         }
 
         .display.running {
-            color: #4ade80;
+            color: var(--accent-hex);
         }
 
         .display.finished {
@@ -201,28 +206,28 @@
         }
 
         .start-btn {
-            border-color: rgba(74, 222, 128, 0.5);
-            color: #4ade80;
+            border-color: rgba(var(--accent-color), 0.5);
+            color: var(--accent-hex);
         }
 
         .start-btn:hover {
-            background: rgba(74, 222, 128, 0.15);
-            border-color: #4ade80;
-            color: #4ade80;
-            text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+            background: rgba(var(--accent-color), 0.15);
+            border-color: var(--accent-hex);
+            color: var(--accent-hex);
+            text-shadow: 0 0 20px rgba(var(--accent-color), 0.5);
         }
 
         .stop-btn {
-            border-color: rgba(248, 113, 113, 0.5);
-            color: #f87171;
+            border-color: rgba(var(--effect-color), 0.5);
+            color: var(--effect-hex);
             display: none;
         }
 
         .stop-btn:hover {
-            background: rgba(248, 113, 113, 0.15);
-            border-color: #f87171;
-            color: #f87171;
-            text-shadow: 0 0 20px rgba(248, 113, 113, 0.5);
+            background: rgba(var(--effect-color), 0.15);
+            border-color: var(--effect-hex);
+            color: var(--effect-hex);
+            text-shadow: 0 0 20px rgba(var(--effect-color), 0.5);
         }
 
         .stop-btn.visible {
@@ -478,17 +483,41 @@
         };
 
         // Color themes for each melody
-        const melodyColors = {
-            chime: { rgb: '251, 191, 36', hex: '#fbbf24' },    // Amber/Gold
-            bell: { rgb: '96, 165, 250', hex: '#60a5fa' },     // Blue
-            arcade: { rgb: '74, 222, 128', hex: '#4ade80' },   // Green
-            siren: { rgb: '248, 113, 113', hex: '#f87171' }    // Red
+        const melodyThemes = {
+            chime: {
+                effect: { rgb: '251, 191, 36', hex: '#fbbf24' },    // Amber/Gold
+                accent: { rgb: '253, 224, 71', hex: '#fde047' },    // Yellow
+                bgStart: '#2e2a1a',
+                bgEnd: '#3e3516'
+            },
+            bell: {
+                effect: { rgb: '96, 165, 250', hex: '#60a5fa' },    // Blue
+                accent: { rgb: '147, 197, 253', hex: '#93c5fd' },   // Light Blue
+                bgStart: '#1a1a2e',
+                bgEnd: '#16213e'
+            },
+            arcade: {
+                effect: { rgb: '74, 222, 128', hex: '#4ade80' },    // Green
+                accent: { rgb: '134, 239, 172', hex: '#86efac' },   // Light Green
+                bgStart: '#1a2e1a',
+                bgEnd: '#163e16'
+            },
+            siren: {
+                effect: { rgb: '248, 113, 113', hex: '#f87171' },   // Red
+                accent: { rgb: '252, 165, 165', hex: '#fca5a5' },   // Light Red
+                bgStart: '#2e1a1a',
+                bgEnd: '#3e1616'
+            }
         };
 
-        function setEffectColor(melody) {
-            const color = melodyColors[melody] || melodyColors.chime;
-            document.documentElement.style.setProperty('--effect-color', color.rgb);
-            document.documentElement.style.setProperty('--effect-hex', color.hex);
+        function setTheme(melody) {
+            const theme = melodyThemes[melody] || melodyThemes.chime;
+            document.documentElement.style.setProperty('--effect-color', theme.effect.rgb);
+            document.documentElement.style.setProperty('--effect-hex', theme.effect.hex);
+            document.documentElement.style.setProperty('--accent-color', theme.accent.rgb);
+            document.documentElement.style.setProperty('--accent-hex', theme.accent.hex);
+            document.documentElement.style.setProperty('--bg-start', theme.bgStart);
+            document.documentElement.style.setProperty('--bg-end', theme.bgEnd);
         }
 
         function selectMelody(melody) {
@@ -497,7 +526,7 @@
             document.querySelectorAll('.melody-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.melody === melody);
             });
-            setEffectColor(melody);
+            setTheme(melody);
             
             // Preview the melody if timer is not in finished state
             if (!display.classList.contains('finished')) {
@@ -558,7 +587,7 @@
             document.querySelectorAll('.melody-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.melody === selectedMelody);
             });
-            setEffectColor(selectedMelody);
+            setTheme(selectedMelody);
         });
 
         // Timer state
