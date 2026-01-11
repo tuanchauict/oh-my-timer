@@ -276,6 +276,25 @@
             to { opacity: 1; }
         }
 
+        .elapsed-counter {
+            display: none;
+            font-size: clamp(16px, 4vw, 24px);
+            color: rgba(var(--effect-color), 0.8);
+            margin-top: 10px;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        .display.finished .elapsed-counter {
+            display: block;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         .melody-selector {
             position: fixed;
             bottom: 90px;
@@ -416,6 +435,9 @@
                 <span class="countdown-value" id="countdownMins">05</span>
                 <span class="display-colon">:</span>
                 <span class="countdown-value" id="countdownSecs">00</span>
+            </div>
+            <div class="elapsed-counter" id="elapsedCounter">
+                <span id="elapsedTime">+00:00</span>
             </div>
         </div>
         <p class="display-hint" id="displayHint">Click to restart</p>
@@ -727,6 +749,12 @@
             }
         }
 
+        // Elapsed time tracking
+        let elapsedInterval = null;
+        let finishedTime = null;
+        const elapsedCounter = document.getElementById('elapsedCounter');
+        const elapsedTime = document.getElementById('elapsedTime');
+
         function timerFinished() {
             isRunning = false;
             clearTimeout(displayInterval);
@@ -736,6 +764,11 @@
             stopBtn.classList.add('finished');
             flashOverlay.classList.add('active');
 
+            // Start elapsed counter
+            finishedTime = Date.now();
+            updateElapsed();
+            elapsedInterval = setInterval(updateElapsed, 1000);
+
             // Play alarm sound
             playSound();
 
@@ -744,10 +777,20 @@
             secondsInput.disabled = false;
         }
 
+        function updateElapsed() {
+            if (!finishedTime) return;
+            const elapsed = Math.floor((Date.now() - finishedTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            elapsedTime.textContent = `+${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
         function stopTimer() {
             isRunning = false;
             clearTimeout(displayInterval);
             clearTimeout(finishTimeout);
+            clearInterval(elapsedInterval);
+            finishedTime = null;
             
             // Stop sound and effects
             stopSound();
@@ -777,6 +820,8 @@
             isRunning = false;
             clearTimeout(displayInterval);
             clearTimeout(finishTimeout);
+            clearInterval(elapsedInterval);
+            finishedTime = null;
             stopSound();
             flashOverlay.classList.remove('active');
             display.classList.remove('finished');
